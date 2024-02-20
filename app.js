@@ -37,7 +37,24 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+// Define route for rendering the staff page
+app.get('/staff', (req, res) => {
+    res.render('staff');
+});
+
+// Define route for rendering the students page
+app.get('/students', (req, res) => {
+    res.render('students');
+});
+
+// Define route for rendering the courses page
+app.get('/courses', (req, res) => {
+    res.render('courses');
+});
+
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
