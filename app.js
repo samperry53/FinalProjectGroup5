@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const Course = require('./models/course');
 const { render } = require('ejs');
 const bodyParser = require('body-parser');
-
+const router = express.Router();
+const courseController = require('./controllers/courseController');
 
 // connect to mongodb
 const dbURI = 'mongodb+srv://sperry53:help@finalprojectgroup5.mieuiqn.mongodb.net/?retryWrites=true&w=majority&appName=FinalProjectGroup5';
@@ -87,61 +88,80 @@ app.get('/course/:id', (req, res) => {
   });
 
 
+
+
 // Define route for rendering the courses page
 app.get('/courses', (req, res) => {
     res.render('courses');
 });
 
-// course routes
-app.get('/courses', (req, res) => {
-    Course.find().sort({ createdAt: -1 })
-      .then((result) => {
-        res.render('index', { title: 'All Courses', courses: result })
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  })
+// Create a new course
+router.post('/courses', courseController.createCourse);
+
+// Get all courses
+router.get('/courses', courseController.getAllCourses);
+
+// Get a single course by ID
+router.get('/courses/:id', courseController.getCourseById);
+
+// Update a course by ID
+router.put('/courses/:id', courseController.updateCourseById);
+
+// Delete a course by ID
+router.delete('/courses/:id', courseController.deleteCourseById);
+
+module.exports = router;
+
+// // course routes
+// app.get('/courses', (req, res) => {
+//     Course.find().sort({ createdAt: -1 })
+//       .then((result) => {
+//         res.render('index', { title: 'All Courses', courses: result })
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       })
+//   })
   
-  app.post('/courses', (req, res) => {
-    const course = new Course(req.body);
+//   app.post('/courses', (req, res) => {
+//     const course = new Course(req.body);
   
-    course.save()
-      .then((result) => {
-        res.redirect('/courses');
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  })
+//     course.save()
+//       .then((result) => {
+//         res.redirect('/courses');
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       })
+//   })
   
-  app.get('/course/:id', (req, res) => {
-    const id = req.params.id;
-    Course.findById(id)
-      .then(result => {
-        res.render('details', { course: result, title: 'Course Details' });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  })
+//   app.get('/course/:id', (req, res) => {
+//     const id = req.params.id;
+//     Course.findById(id)
+//       .then(result => {
+//         res.render('details', { course: result, title: 'Course Details' });
+//       })
+//       .catch(err => {
+//         console.log(err);
+//       });
+//   })
   
-  app.delete('/courses/:id', (req, res) => {
-    const id = req.params.id;
+//   app.delete('/courses/:id', (req, res) => {
+//     const id = req.params.id;
   
-    Course.findByIdAndDelete(id)
-      .then(result => {
-        res.json({ redirect: '/courses' })
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  })
+//     Course.findByIdAndDelete(id)
+//       .then(result => {
+//         res.json({ redirect: '/courses' })
+//       })
+//       .catch(err => {
+//         console.log(err);
+//       })
+//   })
   
   
-  app.get('/courses/create', (req, res) => {
-    res.render('create', { title: 'Create a new course' });
-  });
+//   app.get('/courses/create', (req, res) => {
+//     res.render('create', { title: 'Create a new course' });
+//   });
 
 
 // Start the server
