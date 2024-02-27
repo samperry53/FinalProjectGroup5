@@ -3,6 +3,8 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Course = require('./models/course');
 const { render } = require('ejs');
+const bodyParser = require('body-parser');
+
 
 // connect to mongodb
 const dbURI = 'mongodb+srv://sperry53:help@finalprojectgroup5.mieuiqn.mongodb.net/?retryWrites=true&w=majority&appName=FinalProjectGroup5';
@@ -20,6 +22,7 @@ app.set('view engine', 'ejs');
 // middleware & static files
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
     console.log('new request made:');
@@ -85,59 +88,60 @@ app.get('/course/:id', (req, res) => {
 
 
 // Define route for rendering the courses page
-// app.get('/courses', (req, res) => {
-//     res.render('courses');
-// });
+app.get('/courses', (req, res) => {
+    res.render('courses');
+});
+
 // course routes
-// app.get('/courses', (req, res) => {
-//     Course.find().sort({ createdAt: -1 })
-//       .then((result) => {
-//         res.render('index', { title: 'All Courses', courses: result })
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       })
-//   })
+app.get('/courses', (req, res) => {
+    Course.find().sort({ createdAt: -1 })
+      .then((result) => {
+        res.render('index', { title: 'All Courses', courses: result })
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  })
   
-//   app.post('/courses', (req, res) => {
-//     const course = new Course(req.body);
+  app.post('/courses', (req, res) => {
+    const course = new Course(req.body);
   
-//     blog.save()
-//       .then((result) => {
-//         res.redirect('/blogs');
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       })
-//   })
+    course.save()
+      .then((result) => {
+        res.redirect('/courses');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  })
   
-//   app.get('/blogs/:id', (req, res) => {
-//     const id = req.params.id;
-//     Blog.findById(id)
-//       .then(result => {
-//         res.render('details', { blog: result, title: 'Blog Details' });
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
-//   })
+  app.get('/course/:id', (req, res) => {
+    const id = req.params.id;
+    Course.findById(id)
+      .then(result => {
+        res.render('details', { course: result, title: 'Course Details' });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  })
   
-//   app.delete('/blogs/:id', (req, res) => {
-//     const id = req.params.id;
+  app.delete('/courses/:id', (req, res) => {
+    const id = req.params.id;
   
-//     Blog.findByIdAndDelete(id)
-//       .then(result => {
-//         res.json({ redirect: '/blogs' })
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       })
-//   })
+    Course.findByIdAndDelete(id)
+      .then(result => {
+        res.json({ redirect: '/courses' })
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  })
   
   
-//   app.get('/blogs/create', (req, res) => {
-//     res.render('create', { title: 'Create a new blog' });
-//   });
+  app.get('/courses/create', (req, res) => {
+    res.render('create', { title: 'Create a new course' });
+  });
 
 
 // Start the server
