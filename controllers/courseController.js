@@ -62,3 +62,34 @@ exports.deleteCourseById = async (req, res) => {
         res.status(500).json({ success: false, error: error.message });
     }
 };
+
+// Controller function to render form for updating course details
+exports.renderEditCourseForm = async (req, res) => {
+    try {
+        const course = await Course.findById(req.params.id);
+        res.render('editCourse', { course });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Controller function to update course details
+exports.updateCourse = async (req, res) => {
+    try {
+        const { courseName, description, subjectArea, credits } = req.body;
+        const updatedCourse = await Course.findByIdAndUpdate(req.params.id, { courseName, description, subjectArea, credits }, { new: true });
+        res.redirect('/courses'); // Redirect to course listing page
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Controller function to delete a course
+exports.deleteCourse = async (req, res) => {
+    try {
+        await Course.findByIdAndDelete(req.params.id);
+        res.redirect('/courses'); // Redirect to course listing page
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

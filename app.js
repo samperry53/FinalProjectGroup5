@@ -6,7 +6,8 @@ const { render } = require('ejs');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const courseController = require('./controllers/courseController');
-const const courseRoutes = require('./routes/courseRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const methodOverride = require('method-override');
 
 // connect to mongodb
 const dbURI = 'mongodb+srv://sperry53:help@finalprojectgroup5.mieuiqn.mongodb.net/?retryWrites=true&w=majority&appName=FinalProjectGroup5';
@@ -25,6 +26,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true}));
 app.use(bodyParser.urlencoded({ extended: true }));
+// Use method-override middleware
+app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
     console.log('new request made:');
