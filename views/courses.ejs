@@ -36,6 +36,12 @@
               <p class="subjectArea"><%= course.subjectArea %></p>
               <p class="credits"><%= course.credits %></p>
             </a>
+            <!-- Button to update course -->
+            <a href="/courses/<%= course._id %>/edit" class="btn btn-primary">Edit</a>
+            <!-- Button to delete course -->
+            <form action="/courses/<%= course._id %>?_method=DELETE" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
     
           <% }) %>
         <% } else { %>

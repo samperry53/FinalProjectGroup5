@@ -6,6 +6,7 @@ const { render } = require('ejs');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const courseController = require('./controllers/courseController');
+const const courseRoutes = require('./routes/courseRoutes');
 
 // connect to mongodb
 const dbURI = 'mongodb+srv://sperry53:help@finalprojectgroup5.mieuiqn.mongodb.net/?retryWrites=true&w=majority&appName=FinalProjectGroup5';
